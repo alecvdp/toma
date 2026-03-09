@@ -28,11 +28,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can view all items as cards showing description, dosage, category, and personal notes
   4. User can search and filter items by name or category
   5. All data is stored in a single SQLite file that can be copied for backup
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md — Project setup, database layer, and item service CRUD with TDD
+- [ ] 01-02-PLAN.md — Catalog UI with card view, forms, search, filter, and human verification
 
 ### Phase 2: Daily Log
 **Goal**: User can log daily medication/supplement intake via a grid interface that mirrors their existing spreadsheet workflow
@@ -72,6 +72,6 @@ Phases execute in numeric order: 1 -> 2 -> 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation and Catalog | 0/? | Not started | - |
+| 1. Foundation and Catalog | 0/2 | Planning complete | - |
 | 2. Daily Log | 0/? | Not started | - |
 | 3. Enhancements | 0/? | Not started | - |
