@@ -13,7 +13,7 @@ Toma delivers a personal medication and supplement tracker in three phases: firs
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation and Catalog** - Database schema, item CRUD, catalog UI with categories and default dosages
-- [ ] **Phase 2: Daily Log** - Grid-based daily logging with fixed-dose quick mark, variable dosage, and date navigation
+- [x] **Phase 2: Daily Log** - Grid-based daily logging with fixed-dose quick mark, variable dosage, and date navigation (completed 2026-03-09)
 - [ ] **Phase 3: Enhancements** - Wikipedia auto-fetch, history browsing, CSV export, and data import
 
 ## Phase Details
@@ -44,7 +44,7 @@ Plans:
   3. User can enter a variable dosage for any item on any day, overriding the default
   4. User can navigate to past dates and edit or review that day's log
   5. User can control the column order of items in the grid view
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 02-01-PLAN.md — Log service data layer with TDD: schema, upsert, take-all, grid builder
@@ -73,5 +73,5 @@ Phases execute in numeric order: 1 -> 2 -> 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation and Catalog | 2/2 | Complete | 2026-03-09 |
-| 2. Daily Log | 1/2 | In Progress | - |
+| 2. Daily Log | 2/2 | Complete   | 2026-03-09 |
 | 3. Enhancements | 0/? | Not started | - |
