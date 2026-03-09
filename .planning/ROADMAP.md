@@ -44,11 +44,11 @@ Plans:
   3. User can enter a variable dosage for any item on any day, overriding the default
   4. User can navigate to past dates and edit or review that day's log
   5. User can control the column order of items in the grid view
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md — Log service data layer with TDD: schema, upsert, take-all, grid builder
+- [ ] 02-02-PLAN.md — Daily log UI with editable grid, Take All, date nav, notes, and verification
 
 ### Phase 3: Enhancements
 **Goal**: User has tools that make the tracker clearly better than a spreadsheet -- auto-fetched descriptions, history browsing, and data portability
@@ -72,6 +72,6 @@ Phases execute in numeric order: 1 -> 2 -> 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation and Catalog | 0/2 | Planning complete | - |
-| 2. Daily Log | 0/? | Not started | - |
+| 1. Foundation and Catalog | 2/2 | Complete | 2026-03-09 |
+| 2. Daily Log | 0/2 | Planning complete | - |
 | 3. Enhancements | 0/? | Not started | - |
