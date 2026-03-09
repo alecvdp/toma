@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-03-09T03:51:58.052Z"
-last_activity: 2026-03-09 -- Completed 01-02 (catalog UI)
+status: in_progress
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-03-09T04:15:49Z"
+last_activity: 2026-03-09 -- Completed 02-01 (log data layer)
 progress:
   total_phases: 3
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
-  percent: 100
+  total_plans: 4
+  completed_plans: 3
+  percent: 75
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-08)
 
 **Core value:** Quickly and reliably log daily medications/supplements with their dosages, and review history at a glance
-**Current focus:** Phase 1: Foundation and Catalog
+**Current focus:** Phase 2: Daily Log
 
 ## Current Position
 
-Phase: 1 of 3 (Foundation and Catalog) -- COMPLETE
-Plan: 2 of 2 in current phase -- COMPLETE
-Status: Phase Complete
-Last activity: 2026-03-09 -- Completed 01-02 (catalog UI)
+Phase: 2 of 3 (Daily Log)
+Plan: 1 of 2 in current phase -- COMPLETE
+Status: In Progress
+Last activity: 2026-03-09 -- Completed 02-01 (log data layer)
 
-Progress: [██████████] 100%
+Progress: [███████░░░] 75%
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [██████████] 100%
 *Updated after each plan completion*
 | Phase 01 P01 | 2min | 2 tasks | 9 files |
 | Phase 01 P02 | 3min | 2 tasks | 3 files |
+| Phase 02 P01 | 2min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Card layout with 3-column ratio [3,1,1] for item display
 - [Phase 01]: st.expander for add-item form, session_state for edit/delete modals
 - [Phase 01]: Port 8510 in .streamlit/config.toml
+- [Phase 02]: ON CONFLICT DO UPDATE for idempotent log upserts
+- [Phase 02]: INSERT OR IGNORE with subquery for take_all_fixed_dose batch
+- [Phase 02]: LEFT JOIN items->daily_logs for grid columns (always shows all active items)
 
 ### Pending Todos
 
@@ -80,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T03:38:00.000Z
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-03-09T04:15:49Z
+Stopped at: Completed 02-01-PLAN.md
 Resume file: None

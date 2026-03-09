@@ -18,17 +18,17 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **CAT-07**: User can auto-fetch a 1-3 sentence description from Wikipedia when adding an item
 - [ ] **CAT-08**: User can edit the auto-fetched description
 - [x] **CAT-09**: User can search and filter catalog items by name or category
-- [ ] **CAT-10**: User can set a custom sort order for items in the daily log view
+- [x] **CAT-10**: User can set a custom sort order for items in the daily log view
 - [x] **CAT-11**: User can add personal notes to any catalog item
 
 ### Daily Log
 
-- [ ] **LOG-01**: User can view a grid with dates as rows and items as columns, with dosages as cell values
-- [ ] **LOG-02**: User can mark a fixed-dose item as taken with a single click (auto-fills default dosage)
-- [ ] **LOG-03**: User can enter a variable dosage that overrides the default for a specific day
-- [ ] **LOG-04**: User can mark all fixed-dose items as taken with a single "take all" button
-- [ ] **LOG-05**: User can add an optional note to any individual log entry
-- [ ] **LOG-06**: User can navigate to any date to view or edit that day's log
+- [x] **LOG-01**: User can view a grid with dates as rows and items as columns, with dosages as cell values
+- [x] **LOG-02**: User can mark a fixed-dose item as taken with a single click (auto-fills default dosage)
+- [x] **LOG-03**: User can enter a variable dosage that overrides the default for a specific day
+- [x] **LOG-04**: User can mark all fixed-dose items as taken with a single "take all" button
+- [x] **LOG-05**: User can add an optional note to any individual log entry
+- [x] **LOG-06**: User can navigate to any date to view or edit that day's log
 
 ### Data & History
 
@@ -79,14 +79,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CAT-07 | Phase 3 | Pending |
 | CAT-08 | Phase 3 | Pending |
 | CAT-09 | Phase 1 | Complete |
-| CAT-10 | Phase 2 | Pending |
+| CAT-10 | Phase 2 | Complete |
 | CAT-11 | Phase 1 | Complete |
-| LOG-01 | Phase 2 | Pending |
-| LOG-02 | Phase 2 | Pending |
-| LOG-03 | Phase 2 | Pending |
-| LOG-04 | Phase 2 | Pending |
-| LOG-05 | Phase 2 | Pending |
-| LOG-06 | Phase 2 | Pending |
+| LOG-01 | Phase 2 | Complete |
+| LOG-02 | Phase 2 | Complete |
+| LOG-03 | Phase 2 | Complete |
+| LOG-04 | Phase 2 | Complete |
+| LOG-05 | Phase 2 | Complete |
+| LOG-06 | Phase 2 | Complete |
 | DATA-01 | Phase 1 | Complete |
 | DATA-02 | Phase 3 | Pending |
 | DATA-03 | Phase 3 | Pending |
