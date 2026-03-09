@@ -9,17 +9,17 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Catalog
 
-- [ ] **CAT-01**: User can add a new item to the catalog with name, default dosage, dosage unit, and category
-- [ ] **CAT-02**: User can edit an existing catalog item's details
-- [ ] **CAT-03**: User can remove an item from the catalog
-- [ ] **CAT-04**: User can assign categories/tags to items (supplement, prescription, vitamin, etc.)
-- [ ] **CAT-05**: User can set a default dosage and unit for each item (mg, IU, capsules, etc.)
+- [x] **CAT-01**: User can add a new item to the catalog with name, default dosage, dosage unit, and category
+- [x] **CAT-02**: User can edit an existing catalog item's details
+- [x] **CAT-03**: User can remove an item from the catalog
+- [x] **CAT-04**: User can assign categories/tags to items (supplement, prescription, vitamin, etc.)
+- [x] **CAT-05**: User can set a default dosage and unit for each item (mg, IU, capsules, etc.)
 - [ ] **CAT-06**: User can view catalog items as cards with description, dosage, category, and personal notes
 - [ ] **CAT-07**: User can auto-fetch a 1-3 sentence description from Wikipedia when adding an item
 - [ ] **CAT-08**: User can edit the auto-fetched description
-- [ ] **CAT-09**: User can search and filter catalog items by name or category
+- [x] **CAT-09**: User can search and filter catalog items by name or category
 - [ ] **CAT-10**: User can set a custom sort order for items in the daily log view
-- [ ] **CAT-11**: User can add personal notes to any catalog item
+- [x] **CAT-11**: User can add personal notes to any catalog item
 
 ### Daily Log
 
@@ -32,7 +32,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Data & History
 
-- [ ] **DATA-01**: All data persists in a local SQLite database file
+- [x] **DATA-01**: All data persists in a local SQLite database file
 - [ ] **DATA-02**: User can browse log history by selecting a date range
 - [ ] **DATA-03**: User can export log data to CSV
 - [ ] **DATA-04**: User can import existing medication/supplement data from CSV or Excel
@@ -70,24 +70,24 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CAT-01 | Phase 1 | Pending |
-| CAT-02 | Phase 1 | Pending |
-| CAT-03 | Phase 1 | Pending |
-| CAT-04 | Phase 1 | Pending |
-| CAT-05 | Phase 1 | Pending |
+| CAT-01 | Phase 1 | Complete |
+| CAT-02 | Phase 1 | Complete |
+| CAT-03 | Phase 1 | Complete |
+| CAT-04 | Phase 1 | Complete |
+| CAT-05 | Phase 1 | Complete |
 | CAT-06 | Phase 1 | Pending |
 | CAT-07 | Phase 3 | Pending |
 | CAT-08 | Phase 3 | Pending |
-| CAT-09 | Phase 1 | Pending |
+| CAT-09 | Phase 1 | Complete |
 | CAT-10 | Phase 2 | Pending |
-| CAT-11 | Phase 1 | Pending |
+| CAT-11 | Phase 1 | Complete |
 | LOG-01 | Phase 2 | Pending |
 | LOG-02 | Phase 2 | Pending |
 | LOG-03 | Phase 2 | Pending |
 | LOG-04 | Phase 2 | Pending |
 | LOG-05 | Phase 2 | Pending |
 | LOG-06 | Phase 2 | Pending |
-| DATA-01 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete |
 | DATA-02 | Phase 3 | Pending |
 | DATA-03 | Phase 3 | Pending |
 | DATA-04 | Phase 3 | Pending |
