@@ -1,0 +1,18 @@
+[project]
+name = "toma"
+version = "0.1.0"
+description = "Personal medication and supplement tracker"
+requires-python = ">=3.13"
+dependencies = [
+    "streamlit>=1.55",
+    "pandas>=2.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "ruff",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
