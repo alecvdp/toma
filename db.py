@@ -48,3 +48,22 @@ def init_db():
         conn.execute("""
             CREATE INDEX IF NOT EXISTS idx_items_is_active ON items(is_active)
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS daily_logs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                log_date TEXT NOT NULL,
+                item_id INTEGER NOT NULL,
+                dosage_taken REAL,
+                notes TEXT NOT NULL DEFAULT '',
+                created_at TEXT NOT NULL DEFAULT (datetime('now')),
+                updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+                FOREIGN KEY (item_id) REFERENCES items(id),
+                UNIQUE(log_date, item_id)
+            )
+        """)
+        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_daily_logs_date ON daily_logs(log_date)
+        """)
+        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_daily_logs_item ON daily_logs(item_id)
+        """)
