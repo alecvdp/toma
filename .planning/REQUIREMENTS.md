@@ -15,8 +15,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **CAT-04**: User can assign categories/tags to items (supplement, prescription, vitamin, etc.)
 - [x] **CAT-05**: User can set a default dosage and unit for each item (mg, IU, capsules, etc.)
 - [x] **CAT-06**: User can view catalog items as cards with description, dosage, category, and personal notes
-- [ ] **CAT-07**: User can auto-fetch a 1-3 sentence description from Wikipedia when adding an item
-- [ ] **CAT-08**: User can edit the auto-fetched description
+- [x] **CAT-07**: User can auto-fetch a 1-3 sentence description from Wikipedia when adding an item
+- [x] **CAT-08**: User can edit the auto-fetched description
 - [x] **CAT-09**: User can search and filter catalog items by name or category
 - [x] **CAT-10**: User can set a custom sort order for items in the daily log view
 - [x] **CAT-11**: User can add personal notes to any catalog item
@@ -76,8 +76,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CAT-04 | Phase 1 | Complete |
 | CAT-05 | Phase 1 | Complete |
 | CAT-06 | Phase 1 | Complete |
-| CAT-07 | Phase 3 | Pending |
-| CAT-08 | Phase 3 | Pending |
+| CAT-07 | Phase 3 | Complete |
+| CAT-08 | Phase 3 | Complete |
 | CAT-09 | Phase 1 | Complete |
 | CAT-10 | Phase 2 | Complete |
 | CAT-11 | Phase 1 | Complete |
