@@ -33,9 +33,9 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Data & History
 
 - [x] **DATA-01**: All data persists in a local SQLite database file
-- [ ] **DATA-02**: User can browse log history by selecting a date range
-- [ ] **DATA-03**: User can export log data to CSV
-- [ ] **DATA-04**: User can import existing medication/supplement data from CSV or Excel
+- [x] **DATA-02**: User can browse log history by selecting a date range
+- [x] **DATA-03**: User can export log data to CSV
+- [x] **DATA-04**: User can import existing medication/supplement data from CSV or Excel
 
 ## v2 Requirements
 
@@ -88,9 +88,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LOG-05 | Phase 2 | Complete |
 | LOG-06 | Phase 2 | Complete |
 | DATA-01 | Phase 1 | Complete |
-| DATA-02 | Phase 3 | Pending |
-| DATA-03 | Phase 3 | Pending |
-| DATA-04 | Phase 3 | Pending |
+| DATA-02 | Phase 3 | Complete |
+| DATA-03 | Phase 3 | Complete |
+| DATA-04 | Phase 3 | Complete |
 
 **Coverage:**
 - v1 requirements: 21 total
