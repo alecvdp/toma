@@ -91,3 +91,60 @@ def build_log_grid(target_date: str) -> pd.DataFrame:
     data = {row["item_name"]: row["dosage_taken"] for row in rows}
     df = pd.DataFrame([data], index=[target_date])
     return df
+
+
+def get_logs_by_date_range(start_date: str, end_date: str) -> pd.DataFrame:
+    """Return a DataFrame with dates as rows and active items as columns.
+
+    Dates with no log entries at all are excluded (only dates with at least
+    one entry appear). Items with no entry for a given date show NaN.
+    """
+    with get_connection() as conn:
+        rows = conn.execute(
+            """SELECT
+                   dl.log_date,
+                   i.name AS item_name,
+                   dl.dosage_taken,
+                   i.sort_order
+               FROM daily_logs dl
+               JOIN items i ON dl.item_id = i.id
+               WHERE dl.log_date BETWEEN ? AND ?
+                 AND i.is_active = 1
+               ORDER BY dl.log_date, i.sort_order, i.name""",
+            (start_date, end_date),
+        ).fetchall()
+
+    if not rows:
+        return pd.DataFrame()
+
+    data = [dict(r) for r in rows]
+    df = pd.DataFrame(data)
+    pivot = df.pivot_table(
+        index="log_date",
+        columns="item_name",
+        values="dosage_taken",
+        aggfunc="first",
+    )
+    pivot.index.name = "date"
+    pivot = pivot.sort_index()
+
+    # Order columns by sort_order then name
+    col_order_map = {}
+    for r in data:
+        if r["item_name"] not in col_order_map:
+            col_order_map[r["item_name"]] = (r["sort_order"], r["item_name"])
+    ordered_cols = sorted(pivot.columns, key=lambda c: col_order_map.get(c, (0, c)))
+    pivot = pivot[ordered_cols]
+
+    return pivot
+
+
+def export_logs_csv(df: pd.DataFrame) -> bytes:
+    """Export a DataFrame to UTF-8 encoded CSV bytes.
+
+    The index column is labeled 'date'.
+    """
+    df = df.copy()
+    if df.index.name != "date":
+        df.index.name = "date"
+    return df.to_csv().encode("utf-8")
