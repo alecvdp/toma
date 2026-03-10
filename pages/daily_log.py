@@ -1,13 +1,15 @@
-"""Daily log page - editable grid, Take All, date navigation, and notes."""
+"""Daily log page - editable grid, Take All, date navigation, notes, and history."""
 
-from datetime import date
+from datetime import date, timedelta
 
 import streamlit as st
 
 from services.item_service import get_active_items
 from services.log_service import (
     build_log_grid,
+    export_logs_csv,
     get_logs_by_date,
+    get_logs_by_date_range,
     take_all_fixed_dose,
     upsert_log_entry,
 )
@@ -101,3 +103,31 @@ else:
 
 # --- Legend ---
 st.caption("Empty = not yet logged. 0 = skipped. Any number = dosage taken.")
+
+# --- History Section (DATA-02, DATA-03) ---
+st.divider()
+st.subheader("History")
+
+history_range = st.date_input(
+    "Date range",
+    value=(date.today() - timedelta(days=7), date.today()),
+    max_value=date.today(),
+    key="history_range",
+)
+
+# Guard: date_input returns tuple of 1 or 2 when used as range picker
+if len(history_range) == 2:
+    start, end = history_range
+    history_df = get_logs_by_date_range(
+        start.strftime("%Y-%m-%d"), end.strftime("%Y-%m-%d")
+    )
+    if not history_df.empty:
+        st.dataframe(history_df, use_container_width=True)
+        st.download_button(
+            "Export to CSV",
+            data=export_logs_csv(history_df),
+            file_name=f"toma_log_{start}_{end}.csv",
+            mime="text/csv",
+        )
+    else:
+        st.info("No log entries in this date range.")
