@@ -1,10 +1,14 @@
 """Tests for daily log service functions."""
 
+import pandas as pd
+
 import db
 from services.item_service import create_item
 from services.log_service import (
     build_log_grid,
+    export_logs_csv,
     get_logs_by_date,
+    get_logs_by_date_range,
     take_all_fixed_dose,
     upsert_log_entry,
 )
@@ -184,3 +188,28 @@ def test_build_log_grid_sort_order(test_db):
     columns = list(df.columns)
     assert columns[0] == "Zebra Item"
     assert columns[1] == "Alpha Item"
+
+
+def test_get_logs_by_date_range(test_db):
+    """DATA-02: get_logs_by_date_range returns multi-row DataFrame."""
+    id_a = _create_item("Item A", default_dosage=100.0)
+    id_b = _create_item("Item B", default_dosage=200.0)
+
+    upsert_log_entry("2025-01-15", id_a, 100.0)
+    upsert_log_entry("2025-01-15", id_b, 200.0)
+    upsert_log_entry("2025-01-16", id_a, 150.0)
+    upsert_log_entry("2025-01-17", id_b, 250.0)
+
+    df = get_logs_by_date_range("2025-01-15", "2025-01-16")
+    assert df.shape == (2, 2)  # 2 dates, 2 items
+    assert df.loc["2025-01-15", "Item A"] == 100.0
+    assert df.loc["2025-01-15", "Item B"] == 200.0
+    assert df.loc["2025-01-16", "Item A"] == 150.0
+    assert pd.isna(df.loc["2025-01-16", "Item B"])
+
+
+def test_get_logs_by_date_range_empty(test_db):
+    """get_logs_by_date_range with no logs returns empty DataFrame."""
+    _create_item("Item A", default_dosage=100.0)
+    df = get_logs_by_date_range("2025-06-01", "2025-06-03")
+    assert df.empty
