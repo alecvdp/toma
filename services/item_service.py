@@ -1,6 +1,58 @@
 """Catalog CRUD operations for items."""
 
+import json
+import urllib.parse
+import urllib.request
+
 from db import get_connection
+
+
+def fetch_wikipedia_description(search_term: str) -> str | None:
+    """Fetch a 1-3 sentence description from Wikipedia.
+
+    Uses a two-step approach: opensearch to resolve the correct title,
+    then the REST summary API to get the extract text.
+
+    Returns the extract text (max 3 sentences) or None on any error.
+    """
+    try:
+        headers = {"User-Agent": "Toma/1.0 (personal medication tracker)"}
+
+        # Step 1: Search for the correct title via opensearch
+        encoded = urllib.parse.quote(search_term)
+        search_url = (
+            f"https://en.wikipedia.org/w/api.php"
+            f"?action=opensearch&search={encoded}&limit=1&format=json"
+        )
+        req = urllib.request.Request(search_url, headers=headers)
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read())
+
+        if not data[1]:  # no search results
+            return None
+
+        # Step 2: Fetch summary using the resolved title
+        title = data[1][0].replace(" ", "_")
+        summary_url = (
+            f"https://en.wikipedia.org/api/rest_v1/page/summary/"
+            f"{urllib.parse.quote(title)}"
+        )
+        req = urllib.request.Request(summary_url, headers=headers)
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            summary = json.loads(resp.read())
+
+        extract = summary.get("extract", "")
+        if not extract:
+            return None
+
+        # Truncate to 3 sentences
+        sentences = extract.split(". ")
+        if len(sentences) <= 3:
+            return extract
+        return ". ".join(sentences[:3]) + "."
+
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, KeyError, OSError):
+        return None
 
 
 def create_item(name, category, default_dosage, dosage_unit, notes=""):
