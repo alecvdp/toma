@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A personal web app for tracking daily medication and supplement intake, replacing manual Excel/Airtable spreadsheets. Features a grid-based daily log for recording what was taken and at what dosage, plus a catalog of all items with descriptions, dosage info, categories, and personal notes. Built with Streamlit and SQLite.
+A personal web app for tracking daily medication and supplement intake, replacing manual Excel/Airtable spreadsheets. Features a grid-based daily log, a catalog with Wikipedia-powered descriptions, history browsing, and CSV/Excel data import/export. Built with Streamlit and SQLite.
 
 ## Core Value
 
@@ -12,44 +12,44 @@ Quickly and reliably log daily medications/supplements with their dosages, and r
 
 ### Validated
 
-<!-- Shipped and confirmed valuable. -->
-
-(None yet — ship to validate)
+- ✓ Grid/spreadsheet daily log view (dates as rows, items as columns, dosages as values) — v1.0
+- ✓ Add/edit/remove items in the catalog with card-based display — v1.0
+- ✓ Auto-fetch item descriptions from Wikipedia with ability to edit — v1.0
+- ✓ Default dosages with single-click "take all" for fixed-dose items — v1.0
+- ✓ Variable dosage entry for items where dose changes — v1.0
+- ✓ SQLite database storage (single portable file) — v1.0
+- ✓ Filter/view log history by date range with CSV export — v1.0
+- ✓ Import data from CSV or Excel files — v1.0
 
 ### Active
 
-<!-- Current scope. Building toward these. -->
-
-- [ ] Grid/spreadsheet daily log view (dates as rows, items as columns, dosages as values)
-- [ ] Add/remove items to the catalog
-- [ ] Catalog card view with item details (description, typical dosage, category/tags, personal notes)
-- [ ] Auto-fetch item descriptions from Wikipedia with ability to edit
-- [ ] Default dosages for items that are always the same dose (acts as a quick checkmark)
-- [ ] Variable dosage entry for supplements where dose changes
-- [ ] SQLite database storage (single portable file)
-- [ ] Filter/view log history by date range
+- [ ] Color-coded adherence in grid view (green=taken, red=missed)
+- [ ] Streak/adherence statistics per item
+- [ ] Database backup and restore via UI
 
 ### Out of Scope
 
-- Multi-user / authentication — single user for now
+- Multi-user / authentication — single user tool
 - Time-of-day tracking — not needed currently
 - Drug interaction checking — not building a medical tool
-- Mobile native app — web-first via Streamlit
+- Mobile native app — Streamlit web app works on mobile browsers
 - Cloud/remote database — local SQLite is sufficient
-- Notifications/reminders — out of scope for v1
+- Notifications/reminders — app is a log, not an alarm
+- Barcode/pill scanning — manual entry with Wikipedia is sufficient
 
 ## Context
 
-- Alec currently tracks medications and supplements in Excel/Airtable with columns per item and rows per date
-- Many items have fixed dosages (just need a taken/not-taken marker), while supplements vary
-- Has two existing Python web apps using Streamlit, so familiar with the framework
-- Open to other frameworks but comfortable with Streamlit
-- Single user — personal tracking tool
-- Descriptions should be simple (1-3 sentences), not clinical/scientific data
+Shipped v1.0 with 1,683 LOC Python across 18 files.
+Tech stack: Streamlit, SQLite (WAL mode), pandas, pytest.
+45 tests, all passing. 3 phases, 8 plans executed in 5 days.
+
+Known tech debt:
+- `models.py` Item dataclass is orphaned (never imported, services use dict(row))
+- CAT-10 sort_order has DB infrastructure but no catalog UI to set it
 
 ## Constraints
 
-- **Tech stack**: Python with Streamlit preferred (existing familiarity), SQLite for storage
+- **Tech stack**: Python with Streamlit, SQLite for storage
 - **Deployment**: Local use, no cloud infrastructure required
 - **Data**: Single-file database for easy backup and portability
 
@@ -57,10 +57,14 @@ Quickly and reliably log daily medications/supplements with their dosages, and r
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Streamlit for UI | Existing familiarity, two other apps already built with it | — Pending |
-| SQLite for storage | Portable single file, fast queries, no server needed | — Pending |
-| Wikipedia for descriptions | Simple 1-3 sentence overviews, not clinical data | — Pending |
-| Grid view for daily log | Matches existing Excel mental model | — Pending |
+| Streamlit for UI | Existing familiarity, two other apps already built with it | ✓ Good — rapid development, works well |
+| SQLite for storage | Portable single file, fast queries, no server needed | ✓ Good — WAL mode handles concurrent reads |
+| Wikipedia for descriptions | Simple 1-3 sentence overviews, not clinical data | ✓ Good — stdlib urllib, no extra deps |
+| Grid view for daily log | Matches existing Excel mental model | ✓ Good — st.data_editor works well |
+| dict(row) returns from services | Easy Streamlit/pandas integration | ✓ Good — makes Item dataclass unnecessary |
+| Soft-delete with is_active flag | Preserves data integrity, no cascading deletes | ✓ Good — simple and safe |
+| Direct widget key assignment for Streamlit state | Solves value= caching bug | ✓ Good — required for fetch-to-textarea bridging |
+| Normalize columns at both UI and service layers | Idempotent, catches case mismatches early | ✓ Good — fixed CSV import bugs |
 
 ---
-*Last updated: 2026-03-08 after initialization*
+*Last updated: 2026-03-13 after v1.0 milestone*
