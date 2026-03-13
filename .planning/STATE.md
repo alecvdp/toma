@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 03-02-PLAN.md
-last_updated: "2026-03-10T01:28:00.764Z"
-last_activity: 2026-03-09 -- Completed 03-02 (history, export, import)
+stopped_at: Completed 03-04-PLAN.md
+last_updated: "2026-03-13T14:04:54.429Z"
+last_activity: 2026-03-13 -- Completed 03-03 (Wikipedia fetch widget bridging fix)
 progress:
   total_phases: 3
   completed_phases: 3
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 8
+  completed_plans: 8
   percent: 100
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-03-08)
 ## Current Position
 
 Phase: 3 of 3 (Enhancements) -- COMPLETE
-Plan: 2 of 2 in current phase -- COMPLETE
+Plan: 3 of 3+ in current phase (gap closure) -- COMPLETE
 Status: Complete
-Last activity: 2026-03-09 -- Completed 03-02 (history, export, import)
+Last activity: 2026-03-13 -- Completed 03-03 (Wikipedia fetch widget bridging fix)
 
 Progress: [██████████] 100%
 
@@ -56,6 +56,8 @@ Progress: [██████████] 100%
 | Phase 02 P02 | 3min | 2 tasks | 2 files |
 | Phase 03 P01 | 2min | 2 tasks | 3 files |
 | Phase 03 P02 | 4min | 2 tasks | 8 files |
+| Phase 03 P03 | 1min | 2 tasks | 1 files |
+| Phase 03 P04 | 2min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -83,6 +85,9 @@ Recent decisions affecting current work:
 - [Phase 03]: Description saved via update_item after create_item
 - [Phase 03]: pivot_table with aggfunc=first for date-range grid
 - [Phase 03]: Validate-preview-confirm import flow to prevent accidental writes
+- [Phase 03]: Direct widget key assignment (session_state[key]) instead of value= for Streamlit widget bridging
+- [Phase 03]: _edit_item_loaded guard for seeding widget state on item switch
+- [Phase 03]: Normalize columns at both UI and service layers (idempotent) for case-insensitive import matching
 
 ### Pending Todos
 
@@ -95,6 +100,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T01:25:12.085Z
-Stopped at: Completed 03-02-PLAN.md
+Last session: 2026-03-13T14:04:54.427Z
+Stopped at: Completed 03-04-PLAN.md
 Resume file: None
