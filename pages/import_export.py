@@ -52,6 +52,9 @@ if uploaded_file is not None:
     else:
         import_df = pd.read_csv(uploaded_file)
 
+    # Normalize column names for case-insensitive matching
+    import_df.columns = import_df.columns.str.strip().str.lower()
+
     # Validate against active catalog
     active_items = get_active_items()
     is_valid, messages = validate_import(import_df, active_items)
@@ -64,16 +67,18 @@ if uploaded_file is not None:
             for msg in messages:
                 st.warning(msg)
 
-        # Preview
+        # Compute matched item columns (case-insensitive)
+        item_name_lower = {item["name"].lower() for item in active_items}
+        item_columns = [
+            c for c in import_df.columns if c != "date" and c in item_name_lower
+        ]
+
+        # Preview only recognized columns
+        preview_cols = ["date"] + item_columns
         st.write("**Preview** (first 10 rows):")
-        st.dataframe(import_df.head(10), use_container_width=True)
+        st.dataframe(import_df[preview_cols].head(10), use_container_width=True)
 
         # Summary
-        item_columns = [
-            c
-            for c in import_df.columns
-            if c != "date" and c in {item["name"] for item in active_items}
-        ]
         non_null_count = import_df[item_columns].notna().sum().sum()
         st.write(
             f"Will import up to **{int(non_null_count)} entries** "
