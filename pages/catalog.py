@@ -89,6 +89,11 @@ with st.expander("Add New Item"):
 if st.session_state.editing_item is not None:
     item = get_item(st.session_state.editing_item)
     if item:
+        # Seed edit_description when switching to a new item
+        if st.session_state.get("_edit_item_loaded") != st.session_state.editing_item:
+            st.session_state["edit_description"] = item["description"] or ""
+            st.session_state["_edit_item_loaded"] = st.session_state.editing_item
+
         st.subheader(f"Edit: {item['name']}")
 
         # Fetch Description button for edit (outside form)
@@ -99,17 +104,10 @@ if st.session_state.editing_item is not None:
                 with st.spinner("Fetching from Wikipedia..."):
                     desc = fetch_wikipedia_description(item["name"])
                 if desc:
-                    st.session_state.edit_fetched_description = desc
+                    st.session_state["edit_description"] = desc
                 else:
                     st.warning("No Wikipedia description found.")
                 st.rerun()
-
-        # Determine description default: use fetched if available, else existing
-        edit_desc_value = (
-            st.session_state.edit_fetched_description
-            if st.session_state.edit_fetched_description is not None
-            else (item["description"] or "")
-        )
 
         with st.form("edit_item_form"):
             edit_name = st.text_input("Name", value=item["name"])
@@ -134,7 +132,6 @@ if st.session_state.editing_item is not None:
             )
             edit_description = st.text_area(
                 "Description",
-                value=edit_desc_value,
                 key="edit_description",
                 help="Auto-fetch from Wikipedia or edit manually.",
             )
@@ -161,11 +158,13 @@ if st.session_state.editing_item is not None:
                         notes=edit_notes,
                     )
                     st.session_state.editing_item = None
-                    st.session_state.edit_fetched_description = None
+                    st.session_state.pop("edit_description", None)
+                    st.session_state.pop("_edit_item_loaded", None)
                     st.rerun()
             if cancel_clicked:
                 st.session_state.editing_item = None
-                st.session_state.edit_fetched_description = None
+                st.session_state.pop("edit_description", None)
+                st.session_state.pop("_edit_item_loaded", None)
                 st.rerun()
     else:
         st.session_state.editing_item = None
