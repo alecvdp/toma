@@ -59,11 +59,13 @@ Plans:
   2. User can edit auto-fetched descriptions to customize them
   3. User can browse log history by selecting a date range
   4. User can export log data to CSV and import data from CSV or Excel
-**Plans:** 2 plans
+**Plans:** 4 plans
 
 Plans:
 - [ ] 03-01-PLAN.md — Wikipedia description auto-fetch service + catalog UI integration
 - [ ] 03-02-PLAN.md — History browsing, CSV export, and CSV/Excel import
+- [ ] 03-03-PLAN.md — Gap closure: fix fetch description widget state bridging in catalog UI
+- [ ] 03-04-PLAN.md — Gap closure: fix import case-insensitive matching and preview filtering
 
 ## Progress
 
@@ -74,4 +76,4 @@ Phases execute in numeric order: 1 -> 2 -> 3
 |-------|----------------|--------|-----------|
 | 1. Foundation and Catalog | 2/2 | Complete | 2026-03-09 |
 | 2. Daily Log | 2/2 | Complete   | 2026-03-09 |
-| 3. Enhancements | 0/2 | Not started | - |
+| 3. Enhancements | 2/4 | In progress | - |
