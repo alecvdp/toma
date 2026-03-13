@@ -55,7 +55,7 @@ def test_validate_import_unrecognized_columns(test_db):
     )
     is_valid, messages = validate_import(df, _get_active_items())
     assert is_valid is True
-    assert any("Unknown Item" in msg for msg in messages)
+    assert any("unknown item" in msg.lower() for msg in messages)
 
 
 def test_validate_import_no_matches(test_db):
@@ -94,6 +94,60 @@ def test_import_logs(test_db):
             ("2025-01-16", id_b),
         ).fetchone()
         assert row["dosage_taken"] == 250.0
+
+
+def test_validate_import_case_insensitive_date(test_db):
+    """DATA-04: DataFrame with 'Date' (capital D) column validates successfully."""
+    _create_item("Item A", default_dosage=100.0)
+
+    df = pd.DataFrame({"Date": ["2025-01-15"], "Item A": [100.0]})
+    is_valid, messages = validate_import(df, _get_active_items())
+    assert is_valid is True
+
+
+def test_validate_import_case_insensitive_items(test_db):
+    """DATA-04: DataFrame with lowercase item names matching catalog validates with no unrecognized warnings."""
+    _create_item("Item A", default_dosage=100.0)
+
+    df = pd.DataFrame({"date": ["2025-01-15"], "item a": [100.0]})
+    is_valid, messages = validate_import(df, _get_active_items())
+    assert is_valid is True
+    assert not any("unrecognized" in msg.lower() for msg in messages)
+
+
+def test_import_logs_unit_dosage(test_db):
+    """DATA-04: import_logs parses '750mg' string value as 750.0."""
+    id_a = _create_item("Item A", default_dosage=100.0)
+
+    df = pd.DataFrame({"date": ["2025-01-15"], "Item A": ["750mg"]})
+    count = import_logs(df, _get_active_items())
+    assert count == 1
+
+    with db.get_connection() as conn:
+        row = conn.execute(
+            "SELECT dosage_taken FROM daily_logs WHERE log_date=? AND item_id=?",
+            ("2025-01-15", id_a),
+        ).fetchone()
+        assert row["dosage_taken"] == 750.0
+
+
+def test_import_logs_mixed_units(test_db):
+    """DATA-04: import_logs handles '2.5 tablets', None correctly."""
+    id_a = _create_item("Item A", default_dosage=100.0)
+    _create_item("Item B", default_dosage=200.0)
+
+    df = pd.DataFrame(
+        {"date": ["2025-01-15"], "Item A": ["2.5 tablets"], "Item B": [None]}
+    )
+    count = import_logs(df, _get_active_items())
+    assert count == 1  # Skips NaN/None
+
+    with db.get_connection() as conn:
+        row = conn.execute(
+            "SELECT dosage_taken FROM daily_logs WHERE log_date=? AND item_id=?",
+            ("2025-01-15", id_a),
+        ).fetchone()
+        assert row["dosage_taken"] == 2.5
 
 
 def test_import_logs_skips_unknown(test_db):
