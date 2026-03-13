@@ -23,10 +23,6 @@ if "editing_item" not in st.session_state:
     st.session_state.editing_item = None
 if "deleting_item" not in st.session_state:
     st.session_state.deleting_item = None
-if "fetched_description" not in st.session_state:
-    st.session_state.fetched_description = ""
-if "edit_fetched_description" not in st.session_state:
-    st.session_state.edit_fetched_description = None
 
 # --- Search and Filter Bar ---
 col_search, col_filter = st.columns([3, 1])
@@ -42,32 +38,30 @@ items = search_items(query=search_query, category=filter_category)
 
 # --- Add Item Form ---
 with st.expander("Add New Item"):
-    # Fetch Description button (outside form for dynamic interaction)
-    fetch_col1, fetch_col2 = st.columns([3, 1])
-    with fetch_col1:
-        fetch_name = st.text_input("Item name to look up", key="fetch_name_input")
-    with fetch_col2:
+    # Name + Fetch Description (outside form for dynamic interaction)
+    name_col, fetch_col = st.columns([3, 1])
+    with name_col:
+        add_name = st.text_input("Name", key="add_name_input")
+    with fetch_col:
         st.write("")  # spacing
         if st.button("Fetch Description", key="fetch_add_desc"):
-            if fetch_name.strip():
+            if add_name.strip():
                 with st.spinner("Fetching from Wikipedia..."):
-                    desc = fetch_wikipedia_description(fetch_name.strip())
+                    desc = fetch_wikipedia_description(add_name.strip())
                 if desc:
-                    st.session_state.fetched_description = desc
-                    st.success("Description fetched from Wikipedia.")
+                    st.session_state["add_description"] = desc
                 else:
                     st.warning("No Wikipedia description found. You can enter one manually.")
+                st.rerun()
             else:
                 st.warning("Enter an item name first.")
 
     with st.form("add_item_form", clear_on_submit=True):
-        add_name = st.text_input("Name")
         add_category = st.selectbox("Category", options=CATEGORIES, key="add_category")
         add_dosage = st.number_input("Default Dosage", min_value=0.0, step=0.1, key="add_dosage")
         add_unit = st.selectbox("Dosage Unit", options=DOSAGE_UNITS, key="add_unit")
         add_description = st.text_area(
             "Description",
-            value=st.session_state.fetched_description,
             key="add_description",
             help="Auto-fetch from Wikipedia or type your own description.",
         )
@@ -87,7 +81,7 @@ with st.expander("Add New Item"):
                 )
                 if add_description.strip():
                     update_item(item_id, description=add_description.strip())
-                st.session_state.fetched_description = ""
+                st.session_state["add_description"] = ""
                 st.success(f"Added '{add_name.strip()}' to catalog.")
                 st.rerun()
 
@@ -106,9 +100,9 @@ if st.session_state.editing_item is not None:
                     desc = fetch_wikipedia_description(item["name"])
                 if desc:
                     st.session_state.edit_fetched_description = desc
-                    st.success("Description fetched from Wikipedia.")
                 else:
                     st.warning("No Wikipedia description found.")
+                st.rerun()
 
         # Determine description default: use fetched if available, else existing
         edit_desc_value = (
