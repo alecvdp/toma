@@ -217,6 +217,10 @@ class SupabaseMedicationLogClient:
             raise RuntimeError(
                 f"Supabase {method} {self.table} failed: {detail}"
             ) from exc
+        except (urllib.error.URLError, TimeoutError, OSError) as exc:
+            raise RuntimeError(
+                f"Supabase {method} {self.table} request to {url} failed: {exc}"
+            ) from exc
 
 
 def _encode_postgrest_params(params: dict[str, Any]) -> str:
