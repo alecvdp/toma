@@ -55,9 +55,7 @@ def take_all_fixed_dose(log_date: str) -> int:
     """
     if is_supabase_enabled():
         items = _get_active_items_ordered()
-        existing_names = {
-            row["item_name"] for row in get_logs_by_date(log_date)
-        }
+        existing_names = {row["item_name"] for row in get_logs_by_date(log_date)}
         inserted = 0
         for item in items:
             if item.get("default_dosage") is None or item["name"] in existing_names:
@@ -105,7 +103,10 @@ def get_logs_by_date(log_date: str) -> list[dict]:
                     "dosage_unit": row.get("unit") or item.get("dosage_unit"),
                 }
             )
-        return sorted(entries, key=lambda e: (_sort_value(items_by_name[e["item_name"]]), e["item_name"]))
+        return sorted(
+            entries,
+            key=lambda e: (_sort_value(items_by_name[e["item_name"]]), e["item_name"]),
+        )
 
     with get_connection() as conn:
         rows = conn.execute(
@@ -134,7 +135,10 @@ def build_log_grid(target_date: str) -> pd.DataFrame:
     """
     if is_supabase_enabled():
         items = _get_active_items_ordered()
-        values = {entry["item_name"]: entry["dosage_taken"] for entry in get_logs_by_date(target_date)}
+        values = {
+            entry["item_name"]: entry["dosage_taken"]
+            for entry in get_logs_by_date(target_date)
+        }
         data = {item["name"]: values.get(item["name"]) for item in items}
         return pd.DataFrame([data], index=[target_date])
 
@@ -213,7 +217,9 @@ def _get_active_items_ordered() -> list[dict[str, Any]]:
     return [dict(r) for r in rows]
 
 
-def _supabase_logs_for_date_range(start_date: str, end_date: str) -> list[dict[str, Any]]:
+def _supabase_logs_for_date_range(
+    start_date: str, end_date: str
+) -> list[dict[str, Any]]:
     return get_supabase_client().list_logs(
         start_timestamp=log_date_to_timestamp(start_date),
         end_timestamp=_end_of_day_timestamp(end_date),

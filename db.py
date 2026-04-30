@@ -169,7 +169,9 @@ class SupabaseMedicationLogClient:
             body=[payload],
         )
 
-    def list_logs(self, *, start_timestamp: str, end_timestamp: str) -> list[dict[str, Any]]:
+    def list_logs(
+        self, *, start_timestamp: str, end_timestamp: str
+    ) -> list[dict[str, Any]]:
         """Return medication log rows in timestamp order for an inclusive range."""
         return self._request(
             "GET",
@@ -201,7 +203,9 @@ class SupabaseMedicationLogClient:
             request_headers.update(headers)
 
         data = json.dumps(body).encode("utf-8") if body is not None else None
-        req = urllib.request.Request(url, data=data, headers=request_headers, method=method)
+        req = urllib.request.Request(
+            url, data=data, headers=request_headers, method=method
+        )
         try:
             with urllib.request.urlopen(req, timeout=15) as resp:
                 raw = resp.read()
@@ -210,7 +214,9 @@ class SupabaseMedicationLogClient:
                 return json.loads(raw)
         except urllib.error.HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="replace")
-            raise RuntimeError(f"Supabase {method} {self.table} failed: {detail}") from exc
+            raise RuntimeError(
+                f"Supabase {method} {self.table} failed: {detail}"
+            ) from exc
 
 
 def _encode_postgrest_params(params: dict[str, Any]) -> str:
