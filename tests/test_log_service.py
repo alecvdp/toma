@@ -6,12 +6,33 @@ import db
 from services.item_service import create_item
 from services.log_service import (
     build_log_grid,
-    export_logs_csv,
     get_logs_by_date,
     get_logs_by_date_range,
     take_all_fixed_dose,
     upsert_log_entry,
 )
+
+
+class FakeSupabaseClient:
+    def __init__(self):
+        self.logs = {}
+
+    def upsert_log(self, *, timestamp, name, dose, unit, notes, category):
+        self.logs[(timestamp, name)] = {
+            "timestamp": timestamp,
+            "name": name,
+            "dose": dose,
+            "unit": unit,
+            "notes": notes,
+            "category": category,
+        }
+
+    def list_logs(self, *, start_timestamp, end_timestamp):
+        return [
+            row
+            for (timestamp, _), row in sorted(self.logs.items())
+            if start_timestamp <= timestamp <= end_timestamp
+        ]
 
 
 def _create_item(name, default_dosage=None, dosage_unit="mg", sort_order=0):
@@ -213,3 +234,81 @@ def test_get_logs_by_date_range_empty(test_db):
     _create_item("Item A", default_dosage=100.0)
     df = get_logs_by_date_range("2025-06-01", "2025-06-03")
     assert df.empty
+
+
+def test_upsert_log_entry_writes_to_supabase_when_enabled(test_db):
+    """Supabase path denormalizes item metadata into medication_logs."""
+    item_id = create_item("Aspirin", "medication", 81.0, "mg")
+    client = FakeSupabaseClient()
+    db.configure_supabase_client(client)
+    db.configure_supabase_enabled(True)
+
+    upsert_log_entry("2025-01-15", item_id, 81.0, notes="with food")
+
+    assert client.logs == {
+        ("2025-01-15T00:00:00Z", "Aspirin"): {
+            "timestamp": "2025-01-15T00:00:00Z",
+            "name": "Aspirin",
+            "dose": 81.0,
+            "unit": "mg",
+            "notes": "with food",
+            "category": "medication",
+        }
+    }
+
+
+def test_supabase_reads_build_log_grid(test_db):
+    """Grid reads use Supabase logs with the local catalog for ordering."""
+    id_a = _create_item("Item A", default_dosage=100.0)
+    id_b = _create_item("Item B", default_dosage=200.0)
+    client = FakeSupabaseClient()
+    db.configure_supabase_client(client)
+    db.configure_supabase_enabled(True)
+
+    upsert_log_entry("2025-01-15", id_b, 200.0)
+    upsert_log_entry("2025-01-15", id_a, 100.0)
+
+    df = build_log_grid("2025-01-15")
+
+    assert list(df.columns) == ["Item A", "Item B"]
+    assert df.loc["2025-01-15", "Item A"] == 100.0
+    assert df.loc["2025-01-15", "Item B"] == 200.0
+
+
+def test_supabase_get_logs_by_date_range_builds_export_dataframe(test_db):
+    """Supabase range reads still return the CSV/export dataframe shape."""
+    id_a = _create_item("Item A", default_dosage=100.0)
+    id_b = _create_item("Item B", default_dosage=200.0)
+    client = FakeSupabaseClient()
+    db.configure_supabase_client(client)
+    db.configure_supabase_enabled(True)
+
+    upsert_log_entry("2025-01-15", id_a, 100.0)
+    upsert_log_entry("2025-01-15", id_b, 200.0)
+    upsert_log_entry("2025-01-16", id_a, 150.0)
+
+    df = get_logs_by_date_range("2025-01-15", "2025-01-16")
+
+    assert df.shape == (2, 2)
+    assert df.loc["2025-01-15", "Item A"] == 100.0
+    assert df.loc["2025-01-15", "Item B"] == 200.0
+    assert df.loc["2025-01-16", "Item A"] == 150.0
+    assert pd.isna(df.loc["2025-01-16", "Item B"])
+
+
+def test_supabase_take_all_fixed_dose_skips_existing(test_db):
+    """Take-all checks Supabase before writing default doses."""
+    id_a = _create_item("Item A", default_dosage=100.0)
+    _create_item("Item B", default_dosage=200.0)
+    _create_item("Item C")
+    client = FakeSupabaseClient()
+    db.configure_supabase_client(client)
+    db.configure_supabase_enabled(True)
+
+    upsert_log_entry("2025-01-15", id_a, 100.0)
+    count = take_all_fixed_dose("2025-01-15")
+
+    assert count == 1
+    rows_by_name = {row["name"]: row for row in client.logs.values()}
+    assert set(rows_by_name) == {"Item A", "Item B"}
+    assert rows_by_name["Item B"]["dose"] == 200.0
